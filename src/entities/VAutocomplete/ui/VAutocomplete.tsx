@@ -3,10 +3,10 @@ import { SyntheticEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { Autocomplete, CircularProgress, TextField, Card, CardContent, Button } from "@mui/material";
-import { fetchComments } from "../../store/fetchComments";
-import { IComment } from "../../store/commentSlice";
-import { getComments, getLoadingStatus } from "../../store/selectors/commentsSelectors";
-import { RootState } from "../../store/store";
+import { getComments, getLoadingStatus } from "../model/selectors/commentsSelectors";
+import { fetchComments } from "../model/services/fetchComments";
+import { IComment } from "../model/types/comment";
+import { RootState } from "../../../app/store/store";
 
 import './VAutocomlete.css'
 

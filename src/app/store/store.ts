@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import commentSlice from './commentSlice';
+import commentSlice from '../../entities/VAutocomplete/model/slice/commentSlice';
 
 export const store = configureStore({
     reducer: {

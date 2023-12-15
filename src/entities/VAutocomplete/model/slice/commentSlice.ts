@@ -1,19 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchComments } from './fetchComments';
+import { fetchComments } from '../services/fetchComments';
+import { LoadingStatus } from '../types/loadingStatus';
+import { IComment } from '../types/comment';
 
-export interface IComment {
-    postId: number,
-    id: number,
-    name: string,
-    email: string,
-    body: string
-}
-
-export type LoadingCommentStatus = 'idle' | 'loading' | 'succeeded' | 'failed'
 
 interface ICommentSliceState {
   comments: IComment[] | never[];
-  loading: LoadingCommentStatus;
+  loading: LoadingStatus;
 }
 
 

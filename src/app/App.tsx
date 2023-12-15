@@ -1,4 +1,4 @@
-import { VAutocomplete } from '../components'
+import { VAutocomplete } from '../entities'
 import './styles/index.css'
 
 function App() {
