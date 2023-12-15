@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SyntheticEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Autocomplete, CircularProgress, TextField, Card, CardContent } from "@mui/material";
 import { ThunkDispatch } from "@reduxjs/toolkit";
+import { Autocomplete, CircularProgress, TextField, Card, CardContent, Button } from "@mui/material";
 import { fetchComments } from "../../store/fetchComments";
 import { IComment } from "../../store/commentSlice";
 import { getComments, getLoadingStatus } from "../../store/selectors/commentsSelectors";
 import { RootState } from "../../store/store";
+
+import './VAutocomlete.css'
 
 export const VAutocomplete = () => {
     const dispatch = useDispatch<ThunkDispatch<RootState, void, any>>();
@@ -63,9 +65,8 @@ export const VAutocomplete = () => {
     }, [comments])
 
     return (
-        <>
-            <button className='' onClick={() => dispatch(fetchComments())} type="button">autoComplete</button >
-
+        <div className="comments-container">
+            <Button onClick={() => dispatch(fetchComments())} variant="outlined">Autocomplete</Button>
             <Autocomplete
                 className=""
                 options={filteredComments || []}
@@ -101,8 +102,8 @@ export const VAutocomplete = () => {
                         </Card>
                     </li>
                 )}
-                style={{ maxHeight: 700 }}
+                style={{ width: 700, marginTop: 20 }}
             />
-        </>
+        </div>
     );
 };
