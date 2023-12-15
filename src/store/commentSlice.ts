@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchComments } from './fetchComments';
 
-interface IComment {
+export interface IComment {
     postId: number,
     id: number,
     name: string,
@@ -9,10 +9,10 @@ interface IComment {
     body: string
 }
 
-type LoadingCommentStatus = 'idle' | 'loading' | 'succeeded' | 'failed'
+export type LoadingCommentStatus = 'idle' | 'loading' | 'succeeded' | 'failed'
 
-interface KanbanBoardState {
-  comments?: IComment[] | [];
+interface ICommentSliceState {
+  comments: IComment[] | never[];
   loading: LoadingCommentStatus;
 }
 
@@ -22,7 +22,7 @@ const commentSlice = createSlice({
   initialState: {
     comments: [],
     loading: 'idle',
-  } as KanbanBoardState, 
+  } as ICommentSliceState, 
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -41,5 +41,3 @@ const commentSlice = createSlice({
 
 
 export default commentSlice.reducer;
-
-export type RootState = ReturnType<typeof commentSlice.reducer>;

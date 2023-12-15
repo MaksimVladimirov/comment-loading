@@ -1,47 +1,42 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-ignore
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Autocomplete, CircularProgress, TextField, Card, CardContent } from "@mui/material";
-import { RootState } from "@reduxjs/toolkit/query";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { fetchComments } from "../../store/fetchComments";
+import { IComment } from "../../store/commentSlice";
+import { getComments, getLoadingStatus } from "../../store/selectors/commentsSelectors";
+import { RootState } from "../../store/store";
 
 export const VAutocomplete = () => {
-    // @ts-ignore
     const dispatch = useDispatch<ThunkDispatch<RootState, void, any>>();
-    const [searchText, setSearchText] = useState("");
-    const [filteredComments, setFilteredComments] = useState([]);
-    // @ts-ignore
-    const comments = useSelector((state: RootState) => state.commentSlice.comments);
-    // @ts-ignore
-    const loading = useSelector((state: RootState) => state.commentSlice.loading);
+    const [searchText, setSearchText] = useState('');
+    const [filteredComments, setFilteredComments] = useState<IComment[]>([]);
+    const comments = useSelector(getComments) as IComment[]
+    const loading = useSelector(getLoadingStatus)
 
-    useEffect(() => {
-        setFilteredComments(comments);
-    }, [comments]);
-// @ts-ignore
-    const handleSearchChange = (event, value) => {
+    const handleSearchChange = (
+        _event: SyntheticEvent<Element, Event>,
+        value: string,
+    ) => {
         setSearchText(value);
         if (value) {
-            // @ts-ignore
-            const filtered = comments.filter(comment =>
+            const filteredComments = comments.filter((comment: IComment) =>
                 comment.name.toLowerCase().includes(value.toLowerCase())
             );
-            setFilteredComments(filtered);
+            setFilteredComments(filteredComments);
         } else {
             setFilteredComments(comments);
         }
     };
-// @ts-ignore
-    const handleOptionSelected = (event, value) => {
+
+    const handleOptionSelected = (_event: SyntheticEvent<Element, Event>, value: IComment | null) => {
         if (value) {
             setSearchText(value.name);
         }
     };
-// @ts-ignore
-    const highlightMatches = (text, searchText) => {
+
+    const highlightMatches = (text: string, searchText: string) => {
         if (!searchText) return text;
 
         const lowerText = text.toLowerCase();
@@ -63,6 +58,10 @@ export const VAutocomplete = () => {
         );
     };
 
+    useEffect(() => {
+        setFilteredComments(comments)
+    }, [comments])
+
     return (
         <>
             <button className='' onClick={() => dispatch(fetchComments())} type="button">autoComplete</button >
@@ -70,8 +69,7 @@ export const VAutocomplete = () => {
             <Autocomplete
                 className=""
                 options={filteredComments || []}
-                // @ts-ignore
-                getOptionLabel={(option) => option.name}
+                getOptionLabel={(option: IComment) => option.name}
                 onChange={handleOptionSelected}
                 onInputChange={handleSearchChange}
                 loading={loading === 'loading'}
@@ -90,27 +88,20 @@ export const VAutocomplete = () => {
                             ),
                         }}
                     />
-                )}// @ts-ignore
-                isOptionEqualToValue={(option, value) => option.name === value.name}
-                renderOption={(props, option, state) => (
+                )}
+                isOptionEqualToValue={(option: IComment, value) => option.name === value.name}
+                renderOption={(props, option: IComment, state) => (
                     <li {...props}>
                         <Card variant="outlined">
-                            
                             <CardContent style={{ backgroundColor: state.index % 2 === 0 ? 'white' : 'lightgray' }}>
-                                {/* @ts-ignore */}
-                                {/* @ts-ignore */}
                                 <p>name: {highlightMatches(option.name, searchText)}</p>
-                                {/* @ts-ignore */}
-                                
-                                <p>email : {highlightMatches(option.email, searchText)}</p>
-                                {/* @ts-ignore */}
-                                
-                                <p>body : {highlightMatches(option.body, searchText)}</p>
+                                <p>email : {option.email}</p>
+                                <p>body : {option.body}</p>
                             </CardContent>
                         </Card>
                     </li>
                 )}
-                style={{ width: 700 }}
+                style={{ maxHeight: 700 }}
             />
         </>
     );
